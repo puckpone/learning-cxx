@@ -1,5 +1,5 @@
 ﻿#include "../exercise.h"
-
+#include <cstring>
 // READ: 类模板 <https://zh.cppreference.com/w/cpp/language/class_template>
 
 template<class T>
@@ -10,6 +10,10 @@ struct Tensor4D {
     Tensor4D(unsigned int const shape_[4], T const *data_) {
         unsigned int size = 1;
         // TODO: 填入正确的 shape 并计算 size
+        for (int i = 0; i < 4; i++) {
+            shape[i] = shape_[i];
+            size *= shape[i];
+        }
         data = new T[size];
         std::memcpy(data, data_, size * sizeof(T));
     }
@@ -27,7 +31,30 @@ struct Tensor4D {
     // 例如，`this` 形状为 `[1, 2, 3, 4]`，`others` 形状为 `[1, 2, 1, 4]`，
     // 则 `this` 与 `others` 相加时，3 个形状为 `[1, 2, 1, 4]` 的子张量各自与 `others` 对应项相加。
     Tensor4D &operator+=(Tensor4D const &others) {
-        // TODO: 实现单向广播的加法
+        // 检查形状兼容性
+        for (int i = 0; i < 4; ++i) {
+            if (others.shape[i] != 1 && others.shape[i] != shape[i]) {
+                throw std::invalid_argument("Shapes are not compatible for broadcasting");
+            }
+        }
+        // 计算总元素数
+        unsigned int totalSize = 1;
+        for (int i = 0; i < 4; ++i) {
+            totalSize *= shape[i];
+        }
+        // 广播并加法
+        for (unsigned int idx = 0; idx < totalSize; ++idx) {
+            unsigned int idxOthers = 0, stride = 1, tmp = idx;
+            for (int d = 3; d >= 0; --d) {
+                unsigned int coord = tmp % shape[d];
+                tmp /= shape[d];
+                if (others.shape[d] != 1) {
+                    idxOthers += coord * stride;
+                }
+                stride *= others.shape[d] == 1 ? 1 : shape[d];
+            }
+            data[idx] += others.data[idxOthers];
+        }
         return *this;
     }
 };
