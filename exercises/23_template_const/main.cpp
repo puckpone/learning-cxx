@@ -13,7 +13,7 @@ struct Tensor {
         // TODO: 填入正确的 shape 并计算 size
         for (int i = 0; i < N; i++) {
             shape[i] = shape_[i];
-            size *= shape[i];
+            size *= shape[i]; 
         }
         data = new T[size];
         std::memset(data, 0, size * sizeof(T));
