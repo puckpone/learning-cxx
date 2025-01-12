@@ -22,15 +22,15 @@ public:
 };
 
 using Unique = std::unique_ptr<Resource>;
-Unique reset(Unique ptr) {
+Unique reset(Unique ptr) {  //ptr指向的资源将被释放，返回一个新的Unique指针
     if (ptr) ptr->record('r');
     return std::make_unique<Resource>();
 }
-Unique drop(Unique ptr) {
+Unique drop(Unique ptr) {  //将ptr所有权交给drop函数 但返回nullptr，ptr指向的资源将被释放
     if (ptr) ptr->record('d');
     return nullptr;
 }
-Unique forward(Unique ptr) {
+Unique forward(Unique ptr) { //记录f，返回ptr
     if (ptr) ptr->record('f');
     return ptr;
 }
@@ -53,8 +53,8 @@ int main(int argc, char **argv) {
         {"fd"},
         // TODO: 分析 problems[1] 中资源的生命周期，将记录填入 `std::vector`
         // NOTICE: 此题结果依赖对象析构逻辑，平台相关，提交时以 CI 实际运行平台为准
-        {"", "", "", "", "", "", "", ""},
-        {"", "", "", "", "", "", "", ""},
+        {"ffr", "d"},
+        {"r", "d", "d"}
     };
 
     // ---- 不要修改以下代码 ----

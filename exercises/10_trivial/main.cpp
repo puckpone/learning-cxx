@@ -9,8 +9,8 @@ struct FibonacciCache {
 
 // TODO: 实现正确的缓存优化斐波那契计算
 static unsigned long long fibonacci(FibonacciCache &cache, int i) {
-    for (; cache.cached<i; ++cache.cached) {
-        cache[cached] = cache[cached - 1] + cache[cached - 2];
+    for (; i>1&&cache.cached<=i; ++cache.cached) {
+        cache.cache[cache.cached] = cache.cache[cache.cached - 1] + cache.cache[cache.cached - 2];
     }
     return cache.cache[i];
 }
@@ -22,7 +22,7 @@ int main(int argc, char **argv) {
     FibonacciCache fib;
     fib.cache[0] = 0;
     fib.cache[1] = 1;
-    fib.cached = 1;
+    fib.cached = 2;
     ASSERT(fibonacci(fib, 10) == 55, "fibonacci(10) should be 55");
     std::cout << "fibonacci(10) = " << fibonacci(fib, 10) << std::endl;
     return 0;
