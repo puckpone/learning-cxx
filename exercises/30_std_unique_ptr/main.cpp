@@ -20,6 +20,7 @@ public:
     ~Resource() {
         RECORDS.push_back(_records);
         std::cout << this->fuck << " has been destoryed" << std::endl;
+        std::cout << _records << std::endl;
     }
 };
 
@@ -55,7 +56,7 @@ int main(int argc, char **argv) {
         {"fd"},
         // TODO: 分析 problems[1] 中资源的生命周期，将记录填入 `std::vector`
         // NOTICE: 此题结果依赖对象析构逻辑，平台相关，提交时以 CI 实际运行平台（gcc）为准
-        {"ffd", "r"},
+        {"d", "ffr"},
         {"d", "d", "r"}
     };
 
